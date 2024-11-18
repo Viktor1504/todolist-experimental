@@ -6,6 +6,7 @@ import {ResultCode} from '../common/enums';
 import {setIsLoggedIn} from './appSlice';
 import {Box, CircularProgress} from '@mui/material';
 import {Header} from '../common/components/Header/Header';
+import {ErrorSnackbar} from '../common/ErrorSnackbar/ErrorSnackbar';
 
 function App() {
     const dispatch = useAppDispatch();
@@ -40,6 +41,7 @@ function App() {
     return <>
         <Header/>
         <Outlet/>
+        <ErrorSnackbar/>
     </>
 
 }

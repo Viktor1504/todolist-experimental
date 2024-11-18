@@ -8,6 +8,7 @@ import {ResultCode} from '../../../common/enums';
 import {useAppDispatch, useAppSelector} from '../../../common/hooks';
 import {selectIsLoggedIn, setAppStatus, setIsLoggedIn} from '../../../app/appSlice';
 import {Navigate} from 'react-router-dom';
+import {handleServerAppError, handleServerNetworkError} from '../../../common/utils';
 
 export const Login = () => {
     const dispatch = useAppDispatch();
@@ -24,15 +25,18 @@ export const Login = () => {
             dispatch(setAppStatus({status: 'loading'}))
             try {
                 const res = await login(values);
-                if (res.data?.resultCode === ResultCode.Success) {
-                    localStorage.setItem('sn-token', res.data.data.token);
-                    dispatch(setIsLoggedIn({isLoggedIn: true}));
-                    dispatch(setAppStatus({status: 'succeeded'}))
-                } else {
-                    dispatch(setAppStatus({status: 'failed'}))
+                if (res.data) {
+                    if (res.data.resultCode === ResultCode.Success) {
+                        localStorage.setItem('sn-token', res.data.data.token);
+                        dispatch(setIsLoggedIn({isLoggedIn: true}));
+                        dispatch(setAppStatus({status: 'succeeded'}))
+                    } else {
+                        handleServerAppError(res.data, dispatch)
+                    }
                 }
+
             } catch (error: any) {
-                dispatch(setAppStatus({status: 'failed'}))
+                handleServerNetworkError(error, dispatch)
             }
         },
         validate: values => {
