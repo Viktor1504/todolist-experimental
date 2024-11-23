@@ -1,8 +1,8 @@
 import Alert from '@mui/material/Alert'
 import Snackbar from '@mui/material/Snackbar'
 import {SyntheticEvent} from 'react'
-import {useAppDispatch, useAppSelector} from '../hooks';
-import {selectAppError, setAppError} from '../../app/appSlice';
+import {useAppDispatch, useAppSelector} from '../../hooks';
+import {selectAppError, setAppError} from '../../../app/appSlice';
 
 export const ErrorSnackbar = () => {
     const error = useAppSelector(selectAppError)

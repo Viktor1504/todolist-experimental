@@ -20,8 +20,7 @@ export const Header = () => {
     const logoutHandler = async () => {
         if (isLoggedIn) {
             try {
-                const res = await logout();
-
+                const res = await logout()
                 if (res.data?.resultCode === ResultCode.Success) {
                     dispatch(setIsLoggedIn({isLoggedIn: false}));
                     localStorage.removeItem('sn-token');

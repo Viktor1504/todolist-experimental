@@ -1,4 +1,6 @@
 import {baseApi} from '../../../app/baseApi';
+import {BaseResponse} from '../../../common/types/types';
+import {BaseQueryArg} from '@reduxjs/toolkit/query';
 
 export type Todolist = {
     id: string
@@ -26,7 +28,45 @@ export const todolistsApi = baseApi.injectEndpoints({
             },
             providesTags: ['Todolist'],
         }),
+        addTodolist: build.mutation<BaseResponse<{ item: Todolist }>, string>({
+            query: (title) => {
+                return {
+                    url: 'todo-lists',
+                    method: 'POST',
+                    body: {
+                        title
+                    }
+                }
+            },
+            invalidatesTags: ['Todolist']
+        }),
+        removeTodolist: build.mutation<BaseResponse, string>({
+            query: (id) => {
+                return {
+                    url: `todo-lists/${id}`,
+                    method: 'DELETE',
+                }
+            },
+            invalidatesTags: ['Todolist']
+        }),
+        updateTodolistTitle: build.mutation<BaseResponse, { id: string, title: string }>({
+            query: ({id, title}) => {
+                return {
+                    url: `todo-lists/${id}`,
+                    method: 'PUT',
+                    body: {
+                        title
+                    }
+                }
+            },
+            invalidatesTags: ['Todolist']
+        })
     })
 })
 
-export const {useGetTodolistsQuery} = todolistsApi
+export const {
+    useGetTodolistsQuery,
+    useAddTodolistMutation,
+    useRemoveTodolistMutation,
+    useUpdateTodolistTitleMutation
+} = todolistsApi
