@@ -1,6 +1,8 @@
 import {DomainTask, useGetTasksQuery} from "../../../../api/tasksApi";
 import {DomainTodolist} from "../../../../api/todolistsApi";
 import {TaskStatus} from "../../../../../../common/enums";
+import {List} from "@mui/material";
+import {Task} from "./Task/Task";
 
 export const Tasks = ({todolist}: { todolist: DomainTodolist }) => {
     const {data} = useGetTasksQuery(todolist.id);
@@ -16,15 +18,15 @@ export const Tasks = ({todolist}: { todolist: DomainTodolist }) => {
 
     return (
         <>
-            <ul>
+            <List>
                 {tasksForTodolist ? (
                     tasksForTodolist.map((task: DomainTask) => (
-                        <li key={task.id}>{task.title}</li>
+                        <Task key={task.id} task={task} todolist={todolist}/>
                     ))
                 ) : (
-                    <li>Нет тасок</li>
+                    <p>Тасок нет</p>
                 )}
-            </ul>
+            </List>
         </>
     );
 };

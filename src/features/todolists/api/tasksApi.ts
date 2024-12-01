@@ -15,12 +15,10 @@ export type DomainTask = {
     startDate: string
     deadline: string
     id: string
-    todoListId: string
+    todolistId: string
     order: number
     addedDate: string
 }
-
-
 
 export const tasksApi = baseApi.injectEndpoints({
     endpoints: (build) => ({
@@ -28,8 +26,28 @@ export const tasksApi = baseApi.injectEndpoints({
             query: (todolistId) => `todo-lists/${todolistId}/tasks`,
             providesTags: ['Task'],
         }),
-
+        addTask: build.mutation<GetTasksResponse, { todolistId: string, title: string }>({
+            query: ({todolistId, title}) => {
+                return {
+                    url: `/todo-lists/${todolistId}/tasks`,
+                    method: 'POST',
+                    body: {
+                        title
+                    }
+                }
+            },
+            invalidatesTags: ['Task']
+        }),
+        removeTask: build.mutation<GetTasksResponse, { todolistId: string, taskId: string }>({
+            query: ({todolistId, taskId}) => {
+                return {
+                    url: `/todo-lists/${todolistId}/tasks/${taskId}`,
+                    method: 'DELETE'
+                }
+            },
+            invalidatesTags: ['Task']
+        })
     })
 })
 
-export const {useGetTasksQuery} = tasksApi
+export const {useGetTasksQuery, useAddTaskMutation, useRemoveTaskMutation} = tasksApi
